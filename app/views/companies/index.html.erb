@@ -1,7 +1,9 @@
 <ul>
-    <% @company.each do |company| %>
-            <li>
+    <% @companies.each do |company| %>
+        <% if signed_in?%>
+            <li> 
                 <%= link_to company.name, "/companies/#{company.id}" %>
-            </li>
-        <% end %>
+            </li> 
+        <%end%>
+    <% end %>
 </ul>

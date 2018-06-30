@@ -5,6 +5,25 @@
         <% if signed_in? && company_creator?(current_user)%>
             <%= link_to 'Delete Company', @company, method: :delete, data: {confirm: "Are you sure?"} %>
         <% end %>
+        <% if signed_in? && company_creator?(current_user)%>
+                <%= form_for(:add_user, url: add_user_path) do |f|%>
+                    <%= f.hidden_field :id, value: @company.id%>
+                    <%= f.text_field :login, placeholder: "Username or Email"%>
+                    <%= f.submit "Add User"%>
+                <%end%>
+        <% end %>
+        <% @company.users.each do |com_user| %>
+            <li>
+                <%= link_to com_user.username, "/users/#{com_user.id}" %>
+                <% if com_user.id !=current_user.id%>
+                    <%= form_for(:add_user, url: add_user_path, method: :delete) do |f|%>
+                        <%= f.hidden_field :id, value: @company.id%>
+                        <%= f.hidden_field :login, value: com_user.username%>
+                        <%= f.submit "Remove Users"%>
+                    <% end %>
+                <%end%>
+            </li>
+        <% end %>
         </p>
 	</div>
 </div>

@@ -1,12 +1,13 @@
 class CompaniesController < ApplicationController
-    before_action :find_company, only: [:destroy, :update, :add_user, :remove_user, :all_posts]
+    before_action :find_company, only: [:destroy, :update, :all_posts, :show]
     before_action :find_user, only: [:add_user, :remove_user]
 
     def new
+        @company_id = params[:company_id]
     end
 
     def index
-        @company = Company.all
+        @companies = current_user.companies
     end
 
     def create
@@ -26,19 +27,6 @@ class CompaniesController < ApplicationController
     end
 
     def show
-        begin
-            @company = Company.find(params[:id])
-        rescue
-            flash[:danger] = "Company does not exist"
-            redirect_to root_path
-       # ensure
-      #      begin
-      #          @company = Company.find(params[:id])
-     #       rescue
-    #            flash[:danger] = "Company doesn't exist"
-   #             redirect_to root_path
-   #         end
-        end
     end
 
     def destroy
@@ -77,6 +65,7 @@ class CompaniesController < ApplicationController
         #    render json: {errors: @company.errors.full_messages}, status: :error
        # end
     end
+
 
     def add_user
         if @user.companies.where(id: @company.id).count > 0
@@ -123,13 +112,13 @@ class CompaniesController < ApplicationController
         begin
             @company = Company.find(params[:id])
         rescue
-            flash[:danger] = "Company does not exist"
+            flash[:danger] = "Company does not exist #{params[:id]}!"
             redirect_to root_path
         ensure
             if !signed_in?
                 flash[:danger] = "Please Sign in first"
                 redirect_to login_path
-            elsif  !(current_user.id == @company.creator_id)
+            elsif  @company && !(current_user.id == @company.creator_id)
                 flash[:danger] = "You cannot change other Companies"
                 redirect_to root_path #sosyn
             end
@@ -137,7 +126,20 @@ class CompaniesController < ApplicationController
     end
 
     def find_user
-        login = params[:login]
+        begin
+            @company = Company.find(params[:add_user][:id])
+            if !signed_in?
+                flash[:danger] = "Please Sign in first"
+                redirect_to login_path
+            elsif  @company && !(current_user.id == @company.creator_id)
+                flash[:danger] = "You cannot change other Companies"
+                redirect_to root_path #sosyn
+            end
+        rescue
+            flash[:danger] = "Company does not exist #{params[:add_user][:id]}!"
+            redirect_to root_path
+        end
+        login = params[:add_user][:login]
         if login.include? "@"
             @user=User.find_by_email(login) 
         else 
