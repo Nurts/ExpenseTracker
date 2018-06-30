@@ -1,0 +1,7 @@
+<ul>
+    <% @company.each do |company| %>
+            <li>
+                <%= link_to company.name, "/companies/#{company.id}" %>
+            </li>
+        <% end %>
+</ul>

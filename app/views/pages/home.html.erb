@@ -1,0 +1,14 @@
+<% @title = "Homepage"%>
+<% if signed_in? %>
+    <div class="row">
+        <div class="col-md-3">
+            <h3><%=link_to current_user.username, user_path(current_user)%></h3>
+        </div>
+    </div>
+<% else %>
+    <div class="jumbotron">
+		<h1>Welcome to app!</h1>
+		<%= link_to "Log in", login_path, class: "btn btn-primary" %> 
+		<%= link_to "Sign Up", signup_path, class: "btn btn-outline-info" %>
+	</div>
+<% end %>

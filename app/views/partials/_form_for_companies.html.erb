@@ -1,0 +1,20 @@
+<div class="row">
+	<div class="col-md-6 offset-md-3">
+		<h1><%= "Register company"%></h1>
+		<%= form_for @company do |f|%>
+			<% if @company.errors.any? %>
+				<div class="alert alert-danger"> 
+					<ul>
+						<% @company.errors.full_messages.each do |m|%>
+							<li><%= m %></li>
+						<% end %>
+					</ul>
+				</div>
+			<% end %>
+			<div class="form-group">
+                <%= f.text_field :name, placeholder: "Company Name" , class: "form-control" %>
+			</div>
+			<%= f.submit 'Create company', class: "btn btn-primary" %>
+		<% end %>
+	</div>
+</div>
