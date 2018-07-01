@@ -10,7 +10,7 @@
     </div>
     <%= f.label "Choose Category or Create new one"%>
     <div class="form-group">
-        <%= if @company.categories.count > 0%>
+        <% if (@company.categories.count > 0)%>
             <%= f.select(:category_id,{},{include_blank: true}, {class: "custom-select d-block w-100"}) do %>
             
                 <% @company.categories.each do |c| -%>
