@@ -1,10 +1,11 @@
 class PostsController < ApplicationController
-    before_action :check
+    before_action :check, except: [:destroy]
     before_action :find_post, except: [:create]
 
     def create
         post = Post.new(user_id: current_user.id, title: params[:post][:title], description: params[:post][:description], expense: params[:post][:expense], category_id: params[:post][:category_id])
         if post.save
+            flash[:success] = "Created successfully"
             redirect_to company_path(id: @category.company.id)
         else
             flash[:danger] = post.errors.full_messages.first
@@ -21,28 +22,31 @@ class PostsController < ApplicationController
     end
 
     def destroy
-        if @post.destroy
-            render json: {success: "Deleted Successfully"}
+        unless signed_in?
+            flash[:danger] = "Please Sign in first"
+            redirect_to login_path
+        end
+        @category = @post.category
+        if !@post.category.company.users.exists?(current_user.id)
+            flash[:danger] = "You are not in the company"
+            redirect_to root_path
+        elsif @post.destroy
+            flash[:success] = "Deleted Successfully"
+            redirect_to company_path(id: @category.company.id)
         else
-            render json: {errors: @post.errors.full_messages}, status: :error
+            flash[:danger] = post.errors.full_messages.first
+            redirect_to company_path(id: @category.company.id)
         end
     end
 
-    def show
-        render json: @post
-    end
-
     private
-    def post_params
-        params.permit(:title, :description, :expense, :category_id)
-    end
 
     def check
         unless signed_in?
             flash[:danger] = "Please Sign in first"
             redirect_to login_path
         end
-        if @category = Category.find(params[:category_id])
+        if @category = Category.find(params[:post][:category_id])
             if !@category.company.users.exists?(current_user.id)
                 flash[:danger] = "You are not in the company"
                 redirect_to root_path

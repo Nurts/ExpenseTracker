@@ -10,4 +10,11 @@
         <% end %>
         </p>
 	</div>
+    <div class="col-md-6">
+        <% if @company%>
+            <h2>Information for <%=link_to @company.name, @company%></h2><br>
+		    <%= render 'partials/form_for_post'%>
+            <%= render @company.posts%>
+        <% end %>
+	</div>
 </div>

@@ -13,6 +13,10 @@ class UsersController < ApplicationController
     def show
         begin
             @user = User.find(params[:id])
+            if @user.companies.count > 0
+                @post = Post.new
+                @company = @user.companies.first
+            end
         rescue
             flash[:danger] = "User doesn't exist"
             redirect_to root_path
