@@ -1,12 +1,17 @@
-<div class="container" id = "post-<%= post.id%>">
-    <h2> <%= post.title %></h2>
-    <%= image_tag Icon.find(post.category.icon_id).url, size: 50 , class: "img-fluid img-thumbnail"%>
-    <h4>Category: <%=post.category.name %></h4><br>
-    <%=link_to post.user.username, user_path(id: post.user.id)%> <br>
-    <%=link_to "Delete Post", post, method: :delete, data: {confirm: "Are you sure?"} if current_user?(post.user.id)%>
+<div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class = "d-flex justify-content-between align-items-center w-100">
+    <div class="media text-muted pt-3">
+        <%= image_tag Icon.find(post.category.icon_id).url, size: 50 , class: "img-fluid"%>
+        <h3 class = "pt-2"><%= post.title %></h3>
+    </div>
+        <%=link_to post.user.username, user_path(id: post.user.id)%>
+    </div>
+    <p>Category: <%=post.category.name %></p>
+    <p><%=link_to "Delete Post", post, method: :delete, data: {confirm: "Are you sure?"} if current_user?(post.user.id)%><p>
+    <strong>Description:</strong>
     <p>
         <%= post.description%>
     </p>
-    <h2> <%= post.expense %> $</h2>
-    <p><%=post.created_at.to_date%></p>
+    <div class="float-right"><h2> <%= post.expense %> $</h2></div>
+    <p>Created at: <%=post.created_at.to_date%></p>
 </div>

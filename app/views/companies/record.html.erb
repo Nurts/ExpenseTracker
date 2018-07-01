@@ -1,8 +1,7 @@
-<% @title = "Homepage"%>
 <% if signed_in? %>
     <div class="row">
         <div class="col-md-3">
-            <h3><%=link_to current_user.username, user_path(current_user)%></h3>
+            <h3><%=link_to @company.name, company_path(@company)%></h3>
         </div>
     </div>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -16,7 +15,7 @@
         // Draw the chart and set the chart values
         function dayExpense() {
           var dataArray = [["Category",'Expense']];
-          <%current_user.companies.first.categories.each do |category|%>
+          <%current_user.companies.find(@company.id).categories.each do |category|%>
             dataArray.push (["<%=category.name%>", <%=compute_cost_day(category, Time.now)%>]);
           <%end%>
           var data = new google.visualization.arrayToDataTable(dataArray);
@@ -44,7 +43,7 @@
         // Draw the chart and set the chart values
         function weekExpense() {
           var dataArray = [["Category",'Expense']];
-          <%current_user.companies.first.categories.each do |category|%>
+          <%current_user.companies.find(@company.id).categories.each do |category|%>
             dataArray.push (["<%=category.name%>", <%=compute_cost_week(category, Time.now)%>]);
           <%end%>
           var data = new google.visualization.arrayToDataTable(dataArray);
@@ -69,7 +68,7 @@
         }
         function monthExpense() {
           var dataArray = [["Category",'Expense']];
-          <%current_user.companies.first.categories.each do |category|%>
+          <%current_user.companies.find(@company.id).categories.each do |category|%>
             dataArray.push (["<%=category.name%>", <%=compute_cost_month(category, Time.now)%>]);
           <%end%>
           var data = new google.visualization.arrayToDataTable(dataArray);
@@ -101,11 +100,4 @@
             <div id="monthExpense"></div>
           </ul>
         </table>
-<% else %>
-    <div class="jumbotron">
-		<h1>Welcome to app!</h1>
-		<%= link_to "Log in", login_path, class: "btn btn-primary" %> 
-		<%= link_to "Sign Up", signup_path, class: "btn btn-outline-info" %>
-        <%= link_to "Sign in with Google", "/auth/google_oauth2", class: "btn btn-info" %>
-	</div>
 <% end %>

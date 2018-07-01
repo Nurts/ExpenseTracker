@@ -7,6 +7,10 @@ class SessionsController < ApplicationController
         user = User.from_omniauth(request.env["omniauth.auth"])
         sign_in user
         remember user
+        if user.companies.count == 0
+            c = Company.new(name: "#{user.username}-private", creator_id: user.id)
+            user.companies << c
+        end
         redirect_to user
     end
     

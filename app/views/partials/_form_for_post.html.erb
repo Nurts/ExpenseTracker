@@ -1,14 +1,23 @@
+<div class="my-3 p-3 bg-white rounded box-shadow">
 <%= form_for @post do |f|%>
-    <%= f.text_field :title, placeholder: "Title"%><br>
-    <%= f.text_area :description, placeholder: "Description"%><br>
-    <%= f.number_field :expense, placeholder: "Cost", steps: 1000%><br>
-    <%= f.select(:category_id) do %>
-        <% @company.categories.each do |c| -%>
-            <%= content_tag(:option, c.name, value: c.id) %>
+    <h2>Create new Post</h2>
+    <div class="form-group">
+        <%= f.text_field :title, placeholder: "Title", class: "form-control"%><br>
+        <%= f.text_area :description, placeholder: "Description", class: "form-control"%><br>
+        <div class="col-md-4 mb-3">
+            <%= f.number_field :expense, placeholder: "Cost", steps: 0.5, class: "form-control"%>
+        </div>
+    </div>
+    <%= f.label "Choose Category or Create new one"%>
+    <div class="form-group">
+        <%= f.select(:category_id,{},{include_blank: true}, {class: "custom-select d-block w-100"}) do %>
+        
+            <% @company.categories.each do |c| -%>
+                <%= content_tag(:option, c.name, value: c.id) %>
+            <% end %>
         <% end %>
-    <% end %><br>
-    <%= f.submit "Create Post"%>
+    </div>
+    <%= f.submit "Create Post", class: "btn btn-control"%>
+    <%= link_to "Create Category", new_company_category_path(@company), class: "btn btn-control"%>
 <% end %>
-<div>
-    <%= link_to "Create Category", new_company_category_path(@company)%>
-</div>
+</div   >

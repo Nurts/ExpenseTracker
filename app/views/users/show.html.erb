@@ -1,18 +1,18 @@
 <div class="row">
 	<div class="col-md-3">
-		<h2><%= @user.username %></h2>
-		<h3><%= @user.email %></h3>
+		<h3><%= @user.username %></h3>
+		<p><%= @user.email %></p>
         <p>
         <% if signed_in? && current_user?(@user.id)%>
             <%= link_to 'Edit User', edit_user_path(@user) %> <br>
-            <%= link_to 'Delete User', @user, method: :delete, data: {confirm: "Are you sure?"} %>
+            <%= link_to 'Delete User', @user, method: :delete, data: {confirm: "Are you sure?"} %> <br>
             <%= link_to 'Companies', companies_path(@user) %> <br>
         <% end %>
         </p>
 	</div>
-    <div class="col-md-6">
-        <% if @company%>
-            <h2>Information for <%=link_to @company.name, @company%></h2><br>
+    <div class="col-md-9">
+        <% if @company && @company.users.where(id: current_user.id).count > 0%>
+            <h3>Information for <%=link_to @company.name, @company%></h3>
 		    <%= render 'partials/form_for_post'%>
             <%= render @company.posts%>
         <% end %>

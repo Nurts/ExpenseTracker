@@ -1,4 +1,7 @@
 <ul>
+    <li>
+        <%= link_to "Create Category", new_company_category_path(@company)%>
+    </li>
     <% @categories.each do |category| %>
         <li>
             <%= link_to category.name, company_category_path(id: category.id) %>

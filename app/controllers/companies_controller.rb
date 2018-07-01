@@ -1,6 +1,9 @@
 class CompaniesController < ApplicationController
-    before_action :find_company, only: [:destroy, :update, :all_posts]
+    before_action :find_company, only: [:destroy, :update, :all_posts, :record]
     before_action :find_user, only: [:add_user, :remove_user]
+
+    def record
+    end
 
     def new
         unless signed_in?
@@ -21,6 +24,8 @@ class CompaniesController < ApplicationController
         else
             @company = Company.new(name: params[:company][:name], creator_id: current_user.id)
             if @company.save
+                c = Category.create(name: "Other", icon_id: 1)
+                @company.categories << c
                 current_user.companies << @company
                 redirect_to @company
             else

@@ -14,7 +14,8 @@ class CategoriesController < ApplicationController
         puts params[:categories][:icon_id]
         @category = Category.new(name: params[:category][:name], icon_id: params[:categories][:icon_id], company_id: @company.id)
         if @category.save
-            redirect_to company_category_path(id: @category.id)
+            flash[:success] = "Category created successfully"
+            redirect_to company_path(id: @company.id)
         else
             render :new
         end

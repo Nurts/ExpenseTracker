@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :companies, except: [:edit, :update] do
     resources :categories, except: [:edit, :update]
   end
+  get "/companies/:id/record", to: "companies#record", as: 'record'
   resources :posts, except: [:show, :index]
   resources :icons, only: [:new, :create, :destroy]
   post "/add_user", to: "companies#add_user"

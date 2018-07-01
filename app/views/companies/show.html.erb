@@ -3,27 +3,34 @@
 		<h2><%= @company.name %></h2>
         <p>
         <% if signed_in? && company_creator?(current_user)%>
+            <%= link_to 'Company Records', record_path(id: @company.id) %><br>
             <%= link_to 'Delete Company', @company, method: :delete, data: {confirm: "Are you sure?"} %><br>
         <% end %>
         <%= link_to "Categories", company_categories_path(company_id: @company.id)%>
         <% if signed_in? && company_creator?(current_user)%>
                 <%= form_for(:add_user, url: add_user_path) do |f|%>
                     <%= f.hidden_field :id, value: @company.id%>
-                    <%= f.text_field :login, placeholder: "Username or Email"%>
-                    <%= f.submit "Add User"%>
+                    <%= f.text_field :login, placeholder: "Username or Email", class: "form-control"%>
+                    <%= f.submit "Add User", class: "btn btn-control"%>
                 <%end%>
         <% end %>
+        <br>
+        <h5>Company members</h5>
         <% @company.users.each do |com_user| %>
-            <li>
-                <%= link_to com_user.username, "/users/#{com_user.id}" %>
-                <% if com_user.id !=current_user.id && company_creator?(current_user)%>
-                    <%= form_for(:add_user, url: add_user_path, method: :delete) do |f|%>
-                        <%= f.hidden_field :id, value: @company.id%>
-                        <%= f.hidden_field :login, value: com_user.username%>
-                        <%= f.submit "Remove Users", data: {confirm: "Are you sure?"}%>
-                    <% end %>
-                <%end%>
-            </li>
+            <div class = "d-flex justify-content-between align-items-center w-100">
+                <div><%= link_to com_user.username, "/users/#{com_user.id}" %></div>
+                <span>
+                    <% if com_user.id !=current_user.id && company_creator?(current_user)%>
+                        <%= form_for(:add_user, url: add_user_path, method: :delete) do |f|%>
+                            <%= f.hidden_field :id, value: @company.id%>
+                            <%= f.hidden_field :login, value: com_user.username%>
+                            <%= button_tag(type: 'submit', class: "close", "aria-label" => "Remove user from company", data:  {confirm: "Are you sure to remove this user from company?"} ) do %>
+                                <span aria-hidden="true">&times;</span>
+                            <% end %>
+                        <% end %>
+                    <%end%>
+                </span>
+            </div>
         <% end %>
         </p>
 	</div>

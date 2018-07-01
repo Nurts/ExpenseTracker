@@ -1,3 +1,4 @@
+<h3>Create Category</h3>
 <%= form_for(@category, url: company_categories_path) do |f|%>
     <% if @category.errors.any? %>
         <div class="alert alert-danger"> 
@@ -8,13 +9,14 @@
             </ul>
         </div>
     <% end %>
-    <%= f.text_field :name, placeholder: "Название"%>
+    <%= f.text_field :name, placeholder: "Category Name", class: "form-control"%>
+    <strong>Choose Icon</strong>
     <div>
         <%= collection_radio_buttons(:categories, :icon_id, Icon.all, :id, :id) do |b|%>
             <% b.label(class: "check_box") do %>
-                <% b.radio_button(class: "check_box") + image_tag(b.object.url, size: 30) %>
+                <% b.radio_button(class: "check_box") + image_tag(b.object.url, size: 50) %>
             <% end %>
         <% end %>
     </div>
-    <%= f.submit "Create Category"%>
+    <%= f.submit "Create Category", class: "btn btn-control"%>
 <% end %>
