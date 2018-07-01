@@ -24,7 +24,7 @@ class CompaniesController < ApplicationController
         else
             @company = Company.new(name: params[:company][:name], creator_id: current_user.id)
             if @company.save
-                c = Category.create(name: "Other", icon_id: 1)
+                c = Category.create(name: "Other", icon_id: 8)
                 @company.categories << c
                 current_user.companies << @company
                 redirect_to @company
