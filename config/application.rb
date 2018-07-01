@@ -5,7 +5,6 @@ require 'rails/all'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-config.assets.paths << Rails.root.join("app", "assets", "images", "levers")
 module ExpenseTracker
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
