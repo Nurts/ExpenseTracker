@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   resources :users
+  get 'auth/:provider/callback', to: 'sessions#omniauth_create'
+  get 'auth/failure', to: redirect('/')
   root "pages#home"
   get "/login", to: "sessions#new"
   post "/login", to: "sessions#create"
