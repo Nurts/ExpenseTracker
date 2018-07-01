@@ -30,6 +30,8 @@ class UsersController < ApplicationController
             c = Company.new(name: "#{@user.username}-private", creator_id: @user.id)
             sign_in(@user)
             @user.companies << c
+            cat = Category.create(name: "Other", icon_id: 1)
+            @user.companies.first.categories << cat
             redirect_to @user
         else
             render :new
