@@ -12,7 +12,6 @@ class User < ApplicationRecord
     validates_uniqueness_of :email, :username
     validates_email_format_of :email, message: 'The email format is not correct!'
     validates :password, length: {minimum: 6, maximum: 30}, allow_nil: true
-    validates :username, format: { with: /\A[0-9a-zA-Z_.\-]+\Z/, message: "Only alphanumeric characters, and -_."}
     validates :username, length: {maximum: 30}
     
     class << self
@@ -23,6 +22,19 @@ class User < ApplicationRecord
 
         def new_token
             SecureRandom.urlsafe_base64
+        end
+        def from_omniauth(auth)
+            where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)
+        end
+          
+        def create_from_omniauth(auth)
+            create! do |user|
+              user.provider = auth["provider"]
+              user.uid = auth["uid"]
+              user.username = auth["info"]["last_name"]+" "+auth["info"]["first_name"]
+              user.email =auth["info"]["email"]
+              user.password_digest = '123456789'
+            end
         end
     end
 

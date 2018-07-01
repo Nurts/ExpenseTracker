@@ -3,6 +3,13 @@ class SessionsController < ApplicationController
     def new
     end
 
+    def omniauth_create
+        user = User.from_omniauth(request.env["omniauth.auth"])
+        sign_in user
+        remember user
+        redirect_to user
+    end
+    
     def create
         login = session_params[:login]
         if login.include? "@"
