@@ -1,6 +1,7 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-
+  google_client_id=Rails.application.secrets.google_client_id
+  google_client_secret=Rails.application.secrets.google_secret
   # Code is not reloaded between requests.
   config.cache_classes = true
 

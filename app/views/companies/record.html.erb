@@ -22,7 +22,7 @@
         
           // Optional; add a title and set the width and height of the chart
           var options = {
-            'title':"Today's Spendings", 
+            'title':"Today's Spendings: $<%=compute_total_cost_day(@company, Time.now)%>", 
             'width':1000, 'height':700,
             titleTextStyle: {
               color: 'blue',
@@ -50,7 +50,7 @@
         
           // Optional; add a title and set the width and height of the chart
           var options = {
-            'title':"Week Spendings", 
+            'title':"Week Spendings: $<%=compute_total_cost_week(@company, Time.now)%>", 
             'width':1000, 'height':700,
             titleTextStyle: {
               color: 'blue',
@@ -75,7 +75,7 @@
         
           // Optional; add a title and set the width and height of the chart
           var options = {
-            'title':"Month Spendings", 
+            'title':"Month Spendings: $<%=compute_total_cost_month(@company, Time.now)%>", 
             'width':1000, 'height':700,
             titleTextStyle: {
               color: 'blue',
