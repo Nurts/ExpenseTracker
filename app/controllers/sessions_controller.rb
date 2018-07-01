@@ -10,6 +10,8 @@ class SessionsController < ApplicationController
         if user.companies.count == 0
             c = Company.new(name: "#{user.username}-private", creator_id: user.id)
             user.companies << c
+            cat = Category.create(name: "Other", icon_id: 8)
+            user.companies.first.categories << cat
         end
         redirect_to user
     end
