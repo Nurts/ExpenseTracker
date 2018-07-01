@@ -1,11 +1,12 @@
 <div class="container" id = "post-<%= post.id%>">
     <h2> <%= post.title %></h2>
     <%= image_tag Icon.find(post.category.icon_id).url, size: 50 , class: "img-fluid img-thumbnail"%>
-    <h4>Category: <%=post.category.name %><h4><br>
+    <h4>Category: <%=post.category.name %></h4><br>
     <%=link_to post.user.username, user_path(id: post.user.id)%> <br>
     <%=link_to "Delete Post", post, method: :delete, data: {confirm: "Are you sure?"} if current_user?(post.user.id)%>
     <p>
         <%= post.description%>
     </p>
     <h2> <%= post.expense %> $</h2>
+    <p><%=post.created_at.to_date%></p>
 </div>
