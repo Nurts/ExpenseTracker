@@ -3,8 +3,9 @@
 		<h2><%= @company.name %></h2>
         <p>
         <% if signed_in? && company_creator?(current_user)%>
-            <%= link_to 'Delete Company', @company, method: :delete, data: {confirm: "Are you sure?"} %>
+            <%= link_to 'Delete Company', @company, method: :delete, data: {confirm: "Are you sure?"} %><br>
         <% end %>
+        <%= link_to "Categories", company_categories_path(company_id: @company.id)%>
         <% if signed_in? && company_creator?(current_user)%>
                 <%= form_for(:add_user, url: add_user_path) do |f|%>
                     <%= f.hidden_field :id, value: @company.id%>
@@ -15,15 +16,18 @@
         <% @company.users.each do |com_user| %>
             <li>
                 <%= link_to com_user.username, "/users/#{com_user.id}" %>
-                <% if com_user.id !=current_user.id%>
+                <% if com_user.id !=current_user.id && company_creator?(current_user)%>
                     <%= form_for(:add_user, url: add_user_path, method: :delete) do |f|%>
                         <%= f.hidden_field :id, value: @company.id%>
                         <%= f.hidden_field :login, value: com_user.username%>
-                        <%= f.submit "Remove Users"%>
+                        <%= f.submit "Remove Users", data: {confirm: "Are you sure?"}%>
                     <% end %>
                 <%end%>
             </li>
         <% end %>
         </p>
 	</div>
+    <div class="col-md-9">
+        <%= render 'partials/form_for_post'%>
+    </div>
 </div>

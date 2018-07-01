@@ -1,0 +1,20 @@
+<%= form_for(@category, url: company_categories_path) do |f|%>
+    <% if @category.errors.any? %>
+        <div class="alert alert-danger"> 
+            <ul>
+                <% @company.errors.full_messages.each do |m|%>
+                    <li><%= m %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+    <%= f.text_field :name, placeholder: "Название"%>
+    <div>
+        <%= collection_radio_buttons(:categories, :icon_id, Icon.all, :id, :id) do |b|%>
+            <% b.label(class: "check_box") do %>
+                <% b.radio_button(class: "check_box") + image_tag(b.object.url, size: 30) %>
+            <% end %>
+        <% end %>
+    </div>
+    <%= f.submit "Create Category"%>
+<% end %>

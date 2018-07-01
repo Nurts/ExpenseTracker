@@ -1,10 +1,14 @@
 class IconsController < ApplicationController
+    def new
+        @icon = Icon.new
+    end
+
     def create
-        icon = Icon.new(url: params[:url])
-        if icon.save
-            render json: icon, only: [:id, :url]
+        @icon = Icon.new(url: params[:icon][:url])
+        if @icon.save
+            render json: @icon, only: [:id, :url]
         else
-            render json: {errors: icon.errors.full_messages}, status: :error
+            render json: {errors: @icon.errors.full_messages}, status: :error
         end
     end
 

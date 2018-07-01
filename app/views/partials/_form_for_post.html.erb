@@ -1,0 +1,14 @@
+<%= form_for @post do |f|%>
+    <%= f.text_field :title, placeholder: "Title"%><br>
+    <%= f.text_area :description, placeholder: "Description"%><br>
+    <%= f.number_field :expense, placeholder: "Cost", steps: 1000%><br>
+    <%= f.select(:category_id) do %>
+        <% @company.categories.each do |c| -%>
+            <%= content_tag(:option, c.name, value: c.id) %>
+        <% end %>
+    <% end %><br>
+    <%= f.submit "Create Post"%>
+<% end %>
+<div>
+    <%= link_to "Create Category", new_company_category_path(@company)%>
+</div>

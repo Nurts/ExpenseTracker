@@ -1,0 +1,7 @@
+<ul>
+    <% @categories.each do |category| %>
+        <li>
+            <%= link_to category.name, company_category_path(id: category.id) %>
+        </li>
+    <% end %>
+</ul>

@@ -1,9 +1,13 @@
 class CompaniesController < ApplicationController
-    before_action :find_company, only: [:destroy, :update, :all_posts, :show]
+    before_action :find_company, only: [:destroy, :update, :all_posts]
     before_action :find_user, only: [:add_user, :remove_user]
 
     def new
-        @company_id = params[:company_id]
+        unless signed_in?
+            flash[:danger] = "Please sign in first"
+            redirect_to login_path
+        end
+        @company = Company.new
     end
 
     def index
@@ -15,18 +19,19 @@ class CompaniesController < ApplicationController
             flash[:danger] = "Please sign in first"
             redirect_to login_path
         else
-            company = Company.new(name: params[:name], creator_id: current_user.id)
-            if company.save
-                current_user.companies << company
-                redirect_to company
+            @company = Company.new(name: params[:company][:name], creator_id: current_user.id)
+            if @company.save
+                current_user.companies << @company
+                redirect_to @company
             else
-                flash[:danger] = company.errors.full_messages
                 render :new
             end
         end
     end
 
     def show
+        @company = Company.find(params[:id])
+        @post = Post.new
     end
 
     def destroy
@@ -44,26 +49,6 @@ class CompaniesController < ApplicationController
                 redirect_to root_path
             end
         end
-    end
-
-    def update
-        begin
-            @company = Company.find(params[:id])
-        rescue
-            flash[:danger] = "@company.errors.full_messages"
-            redirect_to root_path
-        ensure
-            if @company.update_attributes(company_params)
-                redirect_to @company
-            else
-                render :new
-            end
-        end
-        #if @company.update_attribute(:name, params[:name])
-         #   render json: @company, only: [:name, :creator_id, :id], include: {users: {only: [:username, :id, :creator_id]}}
-       ## else
-        #    render json: {errors: @company.errors.full_messages}, status: :error
-       # end
     end
 
 
@@ -102,9 +87,9 @@ class CompaniesController < ApplicationController
             flash[:danger] = "Company does not exist"
             redirect_to root_path
         ensure
-            @company.categories.map{ |x| x.posts}
+            @all_posts = @company.categories.map{ |x| x.posts}
+
         end
-        #render json: @company.categories.map{ |x| x.posts}
     end
     private
     

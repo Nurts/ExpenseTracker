@@ -1,0 +1,11 @@
+<div class="row">
+	<div class="col-md-3">
+		<%= image_tag(Icon.find(@category.icon_id).url, size: 100)%>
+        <h2><%= @category.name %></h2>
+        <div>
+            <%= link_to 'Delete Category', company_category_path(id: @category.id), method: :delete, data: {confirm: "Are you sure?"} %>
+        </div>
+        <div>
+
+        </div>
+</div>

@@ -3,11 +3,12 @@ class PostsController < ApplicationController
     before_action :find_post, except: [:create]
 
     def create
-        post = Post.new(user_id: current_user.id, title: params[:title], description: params[:description], expense: params[:expense], category_id: params[:category_id])
+        post = Post.new(user_id: current_user.id, title: params[:post][:title], description: params[:post][:description], expense: params[:post][:expense], category_id: params[:post][:category_id])
         if post.save
-            render json: post
+            redirect_to company_path(id: @category.company.id)
         else
-            render json: {errors: post.errors.full_messages }, status: :error
+            flash[:danger] = post.errors.full_messages.first
+            redirect_to company_path(id: @category.company.id)
         end
     end
     
@@ -38,21 +39,25 @@ class PostsController < ApplicationController
 
     def check
         unless signed_in?
-            render json: {errors: "Please Sign in first"}, status: :error
+            flash[:danger] = "Please Sign in first"
+            redirect_to login_path
         end
         if @category = Category.find(params[:category_id])
             if !@category.company.users.exists?(current_user.id)
-                render json: {errors: "You are not in the company"}, status: :error
+                flash[:danger] = "You are not in the company"
+                redirect_to root_path
             end
         else
-            render json: {errors: "Category does not exist"}, status: :error
+            flash[:danger] = "Category doesn't exist"
+                redirect_to root_path
         end
     end
 
     def find_post
         @post = Post.find(params[:id])
         unless @post
-            render json: {errors: "Post does not exist"}, status: :error 
+            flash[:danger] = "Post doesn't exist"
+                redirect_to root_path
         end
     end
 end
